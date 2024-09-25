@@ -6,12 +6,15 @@
     "start": "bun run src/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@biomejs/biome": "1.9.2",
+    "@types/bun": "latest",
+    "@types/yargs": "^17.0.33"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "yargs": "^17.7.2",
     "zod": "^3.23.8"
   }
 }
