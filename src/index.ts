@@ -2,6 +2,8 @@ import yargs from "yargs";
 import { run } from "./lib/runner.ts";
 import { hideBin } from "yargs/helpers";
 import { parseCsv } from "./csv/parser.ts";
+import { userInput } from "./lib/user-input.ts";
+import chalk from "chalk";
 
 const cli = yargs(hideBin(process.argv))
 	.version("0.0.1")
@@ -38,11 +40,21 @@ run(
 		// we are sure it's a string because of yarg check
 		const csvPath = paths[0] as string;
 
-		console.log(csvPath, delimiter);
-		const data = await parseCsv(csvPath, { delimiter });
-		console.log(data);
+		const { rows, headers } = await parseCsv(csvPath, { delimiter });
+
+		console.log(
+			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => chalk.green(h)).join(", ")}\n`,
+		);
+		while (true) {
+			const input = await userInput(chalk.yellow("Enter a query: "));
+			console.log(input);
+		}
 	},
 	{
+		onInterrupt: async () => {
+			console.log(chalk.blue("\nBye bye!"));
+			process.exit(0);
+		},
 		onError: (err) => {
 			console.error(err.message);
 			process.exit(1);
