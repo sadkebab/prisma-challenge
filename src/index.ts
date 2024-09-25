@@ -1,6 +1,7 @@
 import yargs from "yargs";
 import { run } from "./lib/runner.ts";
 import { hideBin } from "yargs/helpers";
+import { parse } from "./csv/parser.ts";
 
 const cli = yargs(hideBin(process.argv))
 	.version("0.0.1")
@@ -21,8 +22,8 @@ const cli = yargs(hideBin(process.argv))
 			throw new Error("Only one file path is allowed");
 		}
 
-		if (typeof paths[0] === "string" && paths[0].endsWith(".csv")) {
-			throw new Error("File path must not end with .csv");
+		if (typeof paths[0] === "string" && !paths[0].endsWith(".csv")) {
+			throw new Error("File path must end with .csv");
 		}
 
 		if (args.delimiter.length !== 1) {
@@ -38,6 +39,8 @@ run(
 		const csvPath = paths[0] as string;
 
 		console.log(csvPath, delimiter);
+		const data = await parse(csvPath, { delimiter });
+		console.log(data);
 	},
 	{
 		onError: (err) => {
