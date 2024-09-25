@@ -1,7 +1,7 @@
 import yargs from "yargs";
 import { run } from "./lib/runner.ts";
 import { hideBin } from "yargs/helpers";
-import { parse } from "./csv/parser.ts";
+import { parseCsv } from "./csv/parser.ts";
 
 const cli = yargs(hideBin(process.argv))
 	.version("0.0.1")
@@ -39,7 +39,7 @@ run(
 		const csvPath = paths[0] as string;
 
 		console.log(csvPath, delimiter);
-		const data = await parse(csvPath, { delimiter });
+		const data = await parseCsv(csvPath, { delimiter });
 		console.log(data);
 	},
 	{

@@ -14,12 +14,12 @@ const defaultCsvParserOptions: CsvParserOptionsDefault = {
 
 type CsvParserOptions = Prettify<Partial<CsvParserOptionsDefault>>;
 
-type ParseResult = {
+type ParseResult = Prettify<{
 	headers: string[];
 	rows: CsvRow[];
-};
+}>;
 
-export function parse(
+export function parseCsv(
 	csvPath: string,
 	options?: CsvParserOptions,
 ): Promise<ParseResult> {
