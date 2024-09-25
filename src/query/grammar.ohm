@@ -1,0 +1,36 @@
+Query {
+  Projection = projectKeyword Columns (filterKeyword Condition)?
+
+  Columns    = ColumnList | Wildcard
+  ColumnList = NonemptyListOf<colName, spacing>
+  Wildcard   = "*"
+
+  Condition  = Eq | Gt | Gte | Lt | Lte
+
+  Eq         = colName eq value
+  Gt         = colName gt value
+  Gte        = colName gte value
+  Lt         = colName lt value
+  Lte        = colName lte value
+
+  projectKeyword = caseInsensitive<"PROJECT">
+  filterKeyword  = caseInsensitive<"FILTER">
+
+  andOr    = and | or
+  and      = caseInsensitive<"AND">
+  or       = caseInsensitive<"OR">
+
+  eq       = caseInsensitive<"=">
+  gt       = caseInsensitive<">">
+  gte      = caseInsensitive<">=">
+  lt       = caseInsensitive<"<">
+  lte      = caseInsensitive<"<=">
+
+  value           = numbericValue | stringValue
+  numbericValue   = ("-"|"+")? digit+
+  stringValue     = "`" stringChar* "`"
+  stringChar      = ~"`" any
+  spacing         = "," space*
+  colName         = colNameChar+
+  colNameChar     = alnum | "_"
+}

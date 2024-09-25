@@ -4,6 +4,7 @@ import { hideBin } from "yargs/helpers";
 import { parseCsv } from "./csv/parser.ts";
 import { userInput } from "./lib/user-input.ts";
 import chalk from "chalk";
+import { parseQuery, runQuery } from "./query/index.ts";
 
 const cli = yargs(hideBin(process.argv))
 	.version("0.0.1")
@@ -45,9 +46,23 @@ run(
 		console.log(
 			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => chalk.green(h)).join(", ")}\n`,
 		);
+
+		console.log(
+			`Query syntax: ${chalk.green("PROJECT")} ${chalk.cyanBright("[field]")} ${chalk.green("FILTER")} ${chalk.cyanBright("[condition]")}`,
+		);
+
 		while (true) {
 			const input = await userInput(chalk.yellow("Enter a query: "));
-			console.log(input);
+
+			const command = parseQuery(input);
+
+			if ("errorMessage" in command) {
+				console.error(`Syntax error.\n${command.errorMessage}`);
+				continue;
+			}
+
+			const result = runQuery(command, rows);
+			console.log(result);
 		}
 	},
 	{
