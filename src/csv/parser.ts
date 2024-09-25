@@ -14,16 +14,22 @@ const defaultCsvParserOptions: CsvParserOptionsDefault = {
 
 type CsvParserOptions = Prettify<Partial<CsvParserOptionsDefault>>;
 
+type ParseResult = {
+	headers: string[];
+	rows: CsvRow[];
+};
+
 export function parse(
 	csvPath: string,
 	options?: CsvParserOptions,
-): Promise<CsvRow[]> {
+): Promise<ParseResult> {
 	return new Promise((resolve, reject) => {
 		const { delimiter } = {
 			...defaultCsvParserOptions,
 			...options,
 		};
 		const rows: CsvRow[] = [];
+		const fields: string[] = [];
 
 		// we assume that the file has a header
 		const csvParserStream = fastCsvParse({
@@ -31,8 +37,9 @@ export function parse(
 			delimiter,
 		})
 			.on("error", (error) => reject(error))
+			.on("headers", (headers) => fields.push(...headers))
 			.on("data", (row) => rows.push(transformFields(row)))
-			.on("end", () => resolve(rows));
+			.on("end", () => resolve({ rows, headers: fields }));
 
 		createReadStream(csvPath).pipe(csvParserStream);
 	});
