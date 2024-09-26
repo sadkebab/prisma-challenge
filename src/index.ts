@@ -46,23 +46,31 @@ run(
 		console.log(
 			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => chalk.green(h)).join(", ")}\n`,
 		);
-
 		console.log(
 			`Query syntax: ${chalk.green("PROJECT")} ${chalk.cyanBright("[field]")} ${chalk.green("FILTER")} ${chalk.cyanBright("[condition]")}`,
 		);
 
 		while (true) {
 			const input = await userInput(chalk.yellow("Enter a query: "));
+			const query = parseQuery(input);
 
-			const command = parseQuery(input);
-
-			if ("errorMessage" in command) {
-				console.error(`Syntax error.\n${command.errorMessage}`);
+			if ("errorMessage" in query) {
+				console.error(`Syntax error.\n${query.errorMessage}`);
 				continue;
 			}
 
-			const result = runQuery(command, rows);
-			console.log(result);
+			// we check that the required fields exist in the csv
+			if (query.fields.some((f) => !headers.includes(f))) {
+				const missingFields = query.fields.filter((f) => !headers.includes(f));
+				console.error(
+					`Field${missingFields.length > 1 ? "s" : ""} not found: ${missingFields.join(", ")}`,
+				);
+				continue;
+			}
+
+			const result = runQuery(query, rows);
+			console.log(`\n${chalk.blue(result.length)} rows found:\n`);
+			console.table(result);
 		}
 	},
 	{

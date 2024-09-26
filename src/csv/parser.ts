@@ -35,6 +35,7 @@ export function parseCsv(
 		const csvParserStream = fastCsvParse({
 			headers: true,
 			delimiter,
+			trim: true,
 		})
 			.on("error", (error) => reject(error))
 			.on("headers", (headers) => fields.push(...headers))

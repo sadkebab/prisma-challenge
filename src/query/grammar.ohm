@@ -27,7 +27,10 @@ Query {
   lte      = caseInsensitive<"<=">
 
   value           = numbericValue | stringValue
-  numbericValue   = ("-"|"+")? digit+
+  numbericValue   = ("-"|"+")? unsignedNumber
+  unsignedNumber  = decimal | integer
+  decimal         = integer+ "." integer+
+  integer         = digit+
   stringValue     = "`" stringChar* "`"
   stringChar      = ~"`" any
   spacing         = "," space*
