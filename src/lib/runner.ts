@@ -41,6 +41,10 @@ process.on("exit", (code) => {
 	}
 });
 
+/**
+ * This is a utility function I have built time ago and I use by default in most of my scripts and cli tools.
+ * I built it to have a simpler way to define the main function of a script and avoid problems with top level await support.
+ */
 export async function run<TContext = undefined>(
 	fn: (ctx: TContext) => void | Promise<void>,
 	opts: RunOptions<TContext> = {},
