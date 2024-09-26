@@ -5,6 +5,7 @@ import { parseCsv } from "./csv/parser.ts";
 import { userInput } from "./lib/user-input.ts";
 import chalk from "chalk";
 import { parseQuery, runQuery } from "./query/index.ts";
+import { format } from "./lib/table-format.ts";
 
 const cli = yargs(hideBin(process.argv))
 	.version("0.0.1")
@@ -69,8 +70,11 @@ run(
 			}
 
 			const result = runQuery(query, rows);
-			console.log(`\n${chalk.blue(result.length)} rows found:\n`);
-			console.table(result);
+			const fomattedResult = format(
+				result,
+				query.fields.length ? query.fields : headers,
+			);
+			console.log(fomattedResult);
 		}
 	},
 	{
