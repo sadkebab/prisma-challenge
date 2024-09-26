@@ -45,7 +45,7 @@ run(
 		const { rows, headers } = await parseCsv(csvPath, { delimiter });
 
 		console.log(
-			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => chalk.green(h)).join(", ")}\n`,
+			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => `'${chalk.green(h)}'`).join(", ")}\n`,
 		);
 		console.log(
 			`Query syntax: ${chalk.green("PROJECT")} ${chalk.cyanBright("[fields]")} ${chalk.green("FILTER")} ${chalk.cyanBright("[condition]")}`,
