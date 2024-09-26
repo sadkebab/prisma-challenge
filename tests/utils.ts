@@ -9,7 +9,7 @@ export async function createTestFolder() {
 	await mkdir(`./${testFolder}`, { recursive: true });
 }
 
-export async function removeTestFolder() {
+export async function cleanup() {
 	await rm(`./${testFolder}`, { recursive: true, force: true });
 }
 

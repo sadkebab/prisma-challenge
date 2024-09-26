@@ -1,26 +1,42 @@
 import { expect, test, describe, beforeAll, afterAll } from "bun:test";
 import { transformFields, parseCsv } from "../src/csv/parser.ts";
 import { deepEquals } from "bun";
-import { createTestFolder, removeTestFolder, testPath } from "./utils.ts";
+import { createTestFolder, cleanup, testPath } from "./utils.ts";
 import { writeFile } from "node:fs/promises";
 
-test("transformFields convers number compatible strings to numbers in an object", () => {
-	expect(
-		deepEquals(
-			transformFields({
-				id: "1",
-				name: "Alberto",
-				age: "27",
-				from: "🇦🇱",
-			}),
-			{
-				id: 1,
-				name: "Alberto",
-				age: 27,
-				from: "🇦🇱",
-			},
-		),
-	).toBe(true);
+describe("transformFields", () => {
+	test("converts number compatible strings to numbers in an object", () => {
+		expect(
+			deepEquals(
+				transformFields({
+					integer: "1",
+					string: "Test",
+					decimal: "36.5",
+				}),
+				{
+					integer: 1,
+					string: "Test",
+					decimal: 36.5,
+				},
+			),
+		).toBe(true);
+	});
+	test("won't coerce alphanumeric strings to numbers", () => {
+		expect(
+			deepEquals(
+				transformFields({
+					a: "1",
+					b: "a1",
+					c: "1a",
+				}),
+				{
+					a: 1,
+					b: "a1",
+					c: "1a",
+				},
+			),
+		).toBe(true);
+	});
 });
 
 describe("parseCsv", () => {
@@ -69,6 +85,6 @@ describe("parseCsv", () => {
 	});
 
 	afterAll(async () => {
-		await removeTestFolder();
+		await cleanup();
 	});
 });
