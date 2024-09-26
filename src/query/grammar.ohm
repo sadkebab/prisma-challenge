@@ -1,8 +1,8 @@
 Query {
-  Projection = projectKeyword Columns (filterKeyword Condition)?
+  Projection = projectKeyword Fields (filterKeyword Condition)?
 
-  Columns    = ColumnList | Wildcard
-  ColumnList = NonemptyListOf<colName, spacing>
+  Fields     = FieldList | Wildcard
+  FieldList  = NonemptyListOf<colName, spacing>
   Wildcard   = "*"
 
   Condition  = Eq | Gt | Gte | Lt | Lte

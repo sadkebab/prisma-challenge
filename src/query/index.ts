@@ -3,7 +3,7 @@ import { join } from "node:path";
 import * as ohm from "ohm-js";
 
 export type QueryEvalutaion = {
-	columns: string[];
+	fields: string[];
 	filter: (data: Record<string, unknown>) => boolean;
 };
 
@@ -18,14 +18,14 @@ const grammar = ohm.grammar(definition);
 const semantics = grammar.createSemantics();
 
 semantics.addOperation("eval()", {
-	Projection(_, columns, __, condition) {
+	Projection(_, fields, __, condition) {
 		const conditionFns = condition.eval();
-		return { columns: columns.eval(), filter: conditionFns[0] };
+		return { fields: fields.eval(), filter: conditionFns[0] };
 	},
-	Columns(listOrWildcard) {
+	Fields(listOrWildcard) {
 		return listOrWildcard.eval();
 	},
-	ColumnList(list) {
+	FieldList(list) {
 		return list.asIteration().children.map((child) => child.eval());
 	},
 	Wildcard(_) {
@@ -92,8 +92,7 @@ semantics.addOperation("eval()", {
 		return value.sourceString;
 	},
 	_iter(...arr) {
-		// this is called only on conditions
-		// I assume because since it's an optional its treated as iterable
+		// called on conditions
 		// biome-ignore lint/suspicious/noExplicitAny: any is fine here
 		return arr.map((n: any) => n.eval());
 	},
@@ -119,12 +118,12 @@ export function runQuery(
 	const filtered = query.filter ? data.filter(query.filter) : data;
 
 	const mapped =
-		query.columns.length === 0
+		query.fields.length === 0
 			? filtered
 			: filtered.map((row) => {
 					const result: Record<string, unknown> = {};
-					query.columns.forEach((column) => {
-						result[column] = row[column];
+					query.fields.forEach((field) => {
+						result[field] = row[field];
 					});
 					return result;
 				});
