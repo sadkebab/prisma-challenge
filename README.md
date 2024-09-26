@@ -1,8 +1,7 @@
-<!-- @format -->
-
 # Prisma Challenge Submission
 
 This repository is a submission for the "Take Home Challenge: Prisma Core Challenge".
+
 My solution consists of an interactive CLI tool that allows you to query the CSV file until you interrupt it.
 
 ### Prerequisites
