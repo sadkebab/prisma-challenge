@@ -48,7 +48,7 @@ run(
 			`Parsed ${chalk.blue(rows.length)} rows. Available fields: ${headers.map((h) => chalk.green(h)).join(", ")}\n`,
 		);
 		console.log(
-			`Query syntax: ${chalk.green("PROJECT")} ${chalk.cyanBright("[field]")} ${chalk.green("FILTER")} ${chalk.cyanBright("[condition]")}`,
+			`Query syntax: ${chalk.green("PROJECT")} ${chalk.cyanBright("[fields]")} ${chalk.green("FILTER")} ${chalk.cyanBright("[condition]")}`,
 		);
 
 		while (true) {
