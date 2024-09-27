@@ -6,7 +6,7 @@ My solution consists of an interactive CLI tool that allows you to query the CSV
 
 ### Prerequisites
 
-I have used Bun as a bundler and runtime. I haven't used any Bun-specific APIs in the implementation, but since I defined tests using Bun's test runner you will need to have [Bun installed](https://bun.sh/docs/installation).
+I have used Bun as a package manager and runtime. I haven't used any Bun-specific APIs in the implementation, but since I defined tests using Bun's test runner you will need to have [Bun installed](https://bun.sh/docs/installation).
 
 ```base
 npm install -g bun
